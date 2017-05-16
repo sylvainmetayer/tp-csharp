@@ -177,12 +177,12 @@ namespace Projet
         public void Main6()
         {
 
-            var personneA = new Personne();
+            var personneA = new PersonneBase();
             personneA.Nom = "O Brian";
             personneA.Prenom = "Patrick";
             personneA.Age = 75;
 
-            var personneB = new Personne { Nom = "Saylor", Prenom = "Steven", Age= 80 };
+            var personneB = new PersonneBase { Nom = "Saylor", Prenom = "Steven", Age= 80 };
 
             Console.WriteLine("A : {0}", personneA.NomPrenom);
         }
@@ -256,7 +256,7 @@ namespace Projet
 
     }
 
-    class Enseignant : Personne
+    class Enseignant : PersonneBase
     {
         public string Niveau { get; set; }
 
@@ -270,7 +270,7 @@ namespace Projet
         }
     }
 
-    class Eleve : Personne
+    class Eleve : PersonneBase
     {
         public string Class { get; set; }
 
@@ -280,7 +280,7 @@ namespace Projet
         }
     }
 
-    class Personne
+    class PersonneBase : IPersonne
     {
         public string Nom;
         private int _age;
@@ -295,10 +295,10 @@ namespace Projet
             vieilli(1);
         }
 
-        public static Personne Generateur(string nom, string prenom, int age)
+        public static PersonneBase Generateur(string nom, string prenom, int age)
         {
             if (Instance >= 10) return null;
-            return new Personne(nom, prenom, age);
+            return new PersonneBase(nom, prenom, age);
         }
 
         // Virtual = autoriser la surchage pour les classes filles.
@@ -312,14 +312,14 @@ namespace Projet
         private static int _lastId;
         private string nom;
 
-        public Personne(string nom, string prenom, int age)
+        public PersonneBase(string nom, string prenom, int age)
         {
             this.nom = nom;
             this.Prenom = prenom;
             this.Age = age;
         }
 
-        public Personne() { }
+        public PersonneBase() { }
 
         public int Id { get; private set; }
 
@@ -346,11 +346,20 @@ namespace Projet
         }
 
 
-        static bool EstComplet(Personne persone)
+        static bool EstComplet(PersonneBase persone)
         {
             return ((persone.Nom.Length > 0) && (persone.Prenom.Length > 0));
         }
 
+    }
+
+    interface IPersonne
+    {
+        string nom { get; set; }
+        string Prenom { set; get; }
+
+        string QuiSuisJe();
+        string Afficher();
     }
 
     class DemoClass
